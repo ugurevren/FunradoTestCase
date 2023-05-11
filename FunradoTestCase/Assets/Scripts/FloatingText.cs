@@ -26,14 +26,19 @@ public class FloatingText : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        if (_unitTransform== null)
+        {
+            Destroy(gameObject);
+        }
         Transform transform1;
         (transform1 = transform).rotation = Quaternion.LookRotation(transform.position - _mainCameraTransform.position);
         transform1.position = _unitTransform.position + offset;
+        
+        
     }
     
     public void SetText(string text)
     {
-      
         _text.text = text;
         Debug.Log("Text set");
     }

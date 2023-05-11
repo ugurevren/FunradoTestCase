@@ -6,15 +6,11 @@ public class PlayerMovement : MonoBehaviour
 {
     public CharacterController controller;
     private Vector3 playerVelocity;
-
     public float playerSpeed = 2.0f;
     private Joystick _joystick;
     private float _moving;
     Animator _animator;
     private Vector3 _move;
-
-    private float _horizontalInput;
-    private float _verticalInput;
     
    
     private void Start()
@@ -29,12 +25,7 @@ public class PlayerMovement : MonoBehaviour
         _moving = _joystick.Direction.magnitude;
         _animator.SetFloat("moving",_moving);
         
-        // Get input
-        _horizontalInput = Input.GetAxisRaw("Horizontal");
-        _verticalInput = Input.GetAxisRaw("Vertical");
-
-        // Combine joystick and keyboard input
-        _move = new Vector3(_joystick.Horizontal + _horizontalInput, 0, _joystick.Vertical + _verticalInput);
+        _move = new Vector3(_joystick.Horizontal, 0, _joystick.Vertical);
         _move.Normalize();
         
         // Rotate

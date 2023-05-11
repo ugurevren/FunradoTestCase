@@ -2,19 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyController : MonoBehaviour
+public class EnemyController : MonoBehaviour, ICharacter
 {
-    public int level = 1;
-    public int maxLevel = 5;
-    // Start is called before the first frame update
-    void Start()
+    public int enemyLevel = 1;
+    
+    public FloatingText _floatingText;
+    public GameObject _floatingTextObject;
+    
+    private void Awake()
     {
-        
+        _floatingTextObject = GetComponentInChildren<FloatingText>().gameObject;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        
+        _floatingText= _floatingTextObject.GetComponent<FloatingText>();
+        ((ICharacter) this).UpdateLevel(enemyLevel);
+    }
+    public void Combat(Collider other)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void UpdateLevel(int level)
+    {
+        _floatingText.SetText(level.ToString());
     }
 }
