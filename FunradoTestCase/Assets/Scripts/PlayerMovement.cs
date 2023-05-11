@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -8,13 +9,14 @@ public class PlayerMovement : MonoBehaviour
 
     public float playerSpeed = 2.0f;
     private Joystick _joystick;
-    private float moving;
+    private float _moving;
     Animator _animator;
-    private Vector3 move;
+    private Vector3 _move;
 
-    private float horizontalInput;
-    private float verticalInput;
+    private float _horizontalInput;
+    private float _verticalInput;
     
+   
     private void Start()
     {
         controller = gameObject.GetComponent<CharacterController>();
@@ -24,26 +26,26 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        moving = _joystick.Direction.magnitude;
-        _animator.SetFloat("moving",moving);
+        _moving = _joystick.Direction.magnitude;
+        _animator.SetFloat("moving",_moving);
         
         // Get input
-        horizontalInput = Input.GetAxisRaw("Horizontal");
-        verticalInput = Input.GetAxisRaw("Vertical");
+        _horizontalInput = Input.GetAxisRaw("Horizontal");
+        _verticalInput = Input.GetAxisRaw("Vertical");
 
         // Combine joystick and keyboard input
-        move = new Vector3(_joystick.Horizontal + horizontalInput, 0, _joystick.Vertical + verticalInput);
-        move.Normalize();
+        _move = new Vector3(_joystick.Horizontal + _horizontalInput, 0, _joystick.Vertical + _verticalInput);
+        _move.Normalize();
         
         // Rotate
-        if (move.magnitude > 0.1f) {
-            Quaternion targetRotation = Quaternion.LookRotation(move, Vector3.up);
+        if (_move.magnitude > 0.1f) {
+            Quaternion targetRotation = Quaternion.LookRotation(_move, Vector3.up);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 360.0f * Time.deltaTime);
         }
     }
 
     private void FixedUpdate()
     {
-        controller.Move((move * playerSpeed + playerVelocity) * Time.deltaTime);
+        controller.Move((_move * playerSpeed + playerVelocity) * Time.deltaTime);
     }
 }

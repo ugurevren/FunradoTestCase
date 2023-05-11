@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 6161894801258145170}
   - component: {fileID: 6161894801259421030}
   - component: {fileID: 6161894801260539886}
+  - component: {fileID: -5189469996443443568}
   m_Layer: 0
   m_Name: Upgrader
-  m_TagString: Untagged
+  m_TagString: Collectable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -83,3 +84,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &-5189469996443443568
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6161894801258575576}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.16698514, y: 0.1971289, z: 0.08495257}
+  m_Center: {x: 0, y: -0.00000019371514, z: 0.0000000093132275}
