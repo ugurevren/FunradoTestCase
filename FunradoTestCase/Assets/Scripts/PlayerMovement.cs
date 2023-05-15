@@ -9,7 +9,7 @@ public class PlayerMovement : MonoBehaviour
     public float playerSpeed = 2.0f;
     private Joystick _joystick;
     private float _moving;
-    Animator _animator;
+    private Animator _animator;
     private Vector3 _move;
     
    

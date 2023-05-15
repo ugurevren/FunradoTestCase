@@ -18,7 +18,7 @@ public class FloatingText : MonoBehaviour
     {
         _mainCameraTransform= Camera.main.transform;
         _unitTransform = transform.parent;
-        _worldSpaceCanvasTransform = GameObject.FindObjectOfType<Canvas>().transform;
+        _worldSpaceCanvasTransform = WorldCanvasInstance.Instance.transform;
         transform.SetParent(_worldSpaceCanvasTransform);
         _text = GetComponentInChildren<TextMeshProUGUI>();
     }
@@ -36,10 +36,8 @@ public class FloatingText : MonoBehaviour
         
         
     }
-    
     public void SetText(string text)
     {
         _text.text = text;
-        Debug.Log("Text set");
     }
 }
