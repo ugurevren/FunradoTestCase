@@ -2,69 +2,83 @@ using UnityEngine;
 
 namespace Interactable
 {
-    public class Door : MonoBehaviour, Interactable
+    public class Door : MonoBehaviour, IInteractable
     {
-        public enum DoorColor {Red, Blue};
-        public enum DoorType {Key, Triggered};
-        public DoorType doorType;
-        public DoorColor doorColor;
-        private GameObject _lDoor;
-        private GameObject _rDoor;
-        private Material _materialRed;
-        private Material _materialBlue;
+        public enum DoorColor {Red, Blue}; // enum for the door color
+
+        public enum DoorType {Key, Triggered}; // enum for the door type
+        
+        public DoorType doorType; // the door type
+        public DoorColor doorColor; // the door color
+        
+        [SerializeField] private GameObject _lDoor; // the left door
+        [SerializeField] private GameObject _rDoor; // the right door
+        [SerializeField] private Material _materialRed; // the material of the red door
+        [SerializeField] private Material _materialBlue; // the material of the blue door
+        
+        private HingeJoint _lHingeJoint; // the left hinge joint
+        private HingeJoint _rHingeJoint; // the right hinge joint
+        private JointLimits _closedLimits; // the closed limits of the door
+        private JointLimits _openLimits; // the open limits of the door
         private void Start()
         {
-            _rDoor = transform.GetChild(0).gameObject;
-            _lDoor = transform.GetChild(1).gameObject;
-            _lDoor.GetComponent<HingeJoint>().limits = new JointLimits {max = 0, min = 0};
-            _rDoor.GetComponent<HingeJoint>().limits = new JointLimits {max = 0, min = 0};
+            _lHingeJoint= _lDoor.GetComponent<HingeJoint>(); // get the left hinge joint
+            _rHingeJoint= _rDoor.GetComponent<HingeJoint>(); // get the right hinge joint
             
-            _materialRed = Resources.Load<Material>("Materials/Red");
-            _materialBlue = Resources.Load<Material>("Materials/Blue");
+            _closedLimits = new JointLimits {max = 0, min = 0}; // set the closed limits
+            _openLimits = new JointLimits {max = 120, min = -120}; // set the open limits
 
+            _lHingeJoint.limits = _closedLimits; // close the left door
+            _rHingeJoint.limits= _closedLimits; // close the right door
+            
             if (doorType == DoorType.Triggered)
             {
+                // if the door type is triggered, disable the collider
                 GetComponent<Collider>().enabled = false;
             }
-                
-            _lDoor.GetComponent<Renderer>().material = doorColor == DoorColor.Red ? _materialRed : _materialBlue;
+            
+            // set the color of the doors
+            _lDoor.GetComponent<Renderer>().material = doorColor == DoorColor.Red ? _materialRed : _materialBlue; 
             _rDoor.GetComponent<Renderer>().material = doorColor == DoorColor.Red ? _materialRed : _materialBlue;
         }
         public bool Interact()
         {
+            // if the door type is triggered and there is a interact open the door
             if (doorType == DoorType.Triggered)
             {
                 //Open Door
-                _lDoor.GetComponent<HingeJoint>().limits = new JointLimits {max = 120, min = -120};
-                _rDoor.GetComponent<HingeJoint>().limits = new JointLimits {max = 120, min = -120};
+                _lHingeJoint.limits = _openLimits;
+                _rHingeJoint.limits = _openLimits;
                 return true;
             }
             if (doorType == DoorType.Key)
             {
+                // if the door type is key, check if the player has the key
                 foreach (var key in PlayerInventory.keys)
                 {
                     if (key.keyColor == CollectableKey.KeyColor.Red && doorColor == DoorColor.Red)
                     {
-                        key.RemoveSprite();
-                        PlayerInventory.keys.Remove(key);
-                        //Open Red Door
-                        _lDoor.GetComponent<HingeJoint>().limits = new JointLimits {max = 120, min = -120};
-                        _rDoor.GetComponent<HingeJoint>().limits = new JointLimits {max = 120, min = -120};
+                        // if the player has the right key, open the red door
+                        key.RemoveSprite(); // remove the key sprite
+                        PlayerInventory.keys.Remove(key); // remove the key from the player inventory
+                        // open the door
+                        _lHingeJoint.limits = _openLimits;
+                        _rHingeJoint.limits = _openLimits;
                         return true;
                     }
                     if (key.keyColor == CollectableKey.KeyColor.Blue && doorColor == DoorColor.Blue)
                     {
-                        key.RemoveSprite();
-                        PlayerInventory.keys.Remove(key);
-                        //Open Blue Door
-                        _lDoor.GetComponent<HingeJoint>().limits = new JointLimits {max = 120, min = -120};
-                        _rDoor.GetComponent<HingeJoint>().limits = new JointLimits {max = 120, min = -120};
+                        // if the player has the right key, open the blue door
+                        key.RemoveSprite(); // remove the key sprite
+                        PlayerInventory.keys.Remove(key); // remove the key from the player inventory
+                        // open the door
+                        _lHingeJoint.limits = _openLimits;
+                        _rHingeJoint.limits = _openLimits;
                         return true;
                     }
                 }
             }
             return false;
         }
-
     }
 }

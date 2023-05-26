@@ -7,42 +7,41 @@ namespace Character
 {
     public class PlayerController : Character
     {
-        public int maxLevel = 20;
-
+        [SerializeField] protected internal int levelIncreaseRate;
         private void Awake()
         {
-            _floatingTextObject = GetComponentInChildren<FloatingText>().gameObject;
+            floatingTextObject = GetComponentInChildren<FloatingText>().gameObject; // Get the floating text object.
         }
 
         private void Start()
         {
-            _floatingText= _floatingTextObject.GetComponent<FloatingText>();
-            UpdateLevelText(level);
+            floatingText= floatingTextObject.GetComponent<FloatingText>();  // Get the floating text component.
+            UpdateLevelText(level); // Update the level text.
         }
         
-
         private void OnTriggerEnter(Collider other)
         {
-            var interactable = other.GetComponent(typeof(Interactable.Interactable)) as Interactable.Interactable;
-            Debug.Log(other.name);
+            // If the player collides with an interactable object, interact with it.
+            var interactable = other.GetComponent<IInteractable>();
             interactable?.Interact();
             if (other.CompareTag("Enemy"))
             {
+                // If the player collides with an enemy, start combat.
                 Combat(other);
             }
         }
 
         public override void Combat(Collider other)
         {
-            var enemy = other.GetComponent<Character>();
-            enemy.Combat(gameObject.GetComponent<Collider>());
+            var enemy = other.GetComponent<Character>();    // Get the enemy character.
+            enemy.Combat(gameObject.GetComponent<Collider>());  // Start combat with the enemy.
             
-            int enemyLevel = enemy.level;
+            int enemyLevel = enemy.level;   // Get the level of the enemy.
 
             if (enemyLevel > level)
             {
+                // Destroy player and restart game
                 gameObject.GetComponent<Animator>().enabled = false;
-                // Player loses, restart game
                 level = 1;
                 // Reload current scene
                 StartCoroutine(RestartScene(2f));
@@ -50,11 +49,8 @@ namespace Character
             else if (enemyLevel < level)
             {
                 // Destroy enemy and increase level
-                if (level <= maxLevel - 5)
-                {
-                    level+=5;
-                    UpdateLevelText(level);
-                }
+                level+=levelIncreaseRate;
+                UpdateLevelText(level);
             }
         }
         private IEnumerator RestartScene(float timeToWait)

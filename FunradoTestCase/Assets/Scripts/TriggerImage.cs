@@ -8,26 +8,18 @@ using UnityEngine.UI;
 
 public class TriggerImage : MonoBehaviour
 {
-    private Transform _unitTransform;
     private Transform _worldSpaceCanvasTransform;
-    private Sprite _lockSprite;
     private Sprite _unlockSprite;
-    private Image _image;
-    private Sprite _spriteLocked;
-    private Sprite _spriteUnlocked;
-    public Vector3 offset;
+    [SerializeField] private Image unlockedImageComponent; // Image component of the TriggerImage
+    [SerializeField] private Sprite unlockedSprite; // Sprite of the TriggerImage
     private void Start()
     {
-      
-        _unitTransform = transform.parent;
-        _worldSpaceCanvasTransform = WorldCanvasInstance.Instance.transform;
-        transform.SetParent(_worldSpaceCanvasTransform);
-        _image = transform.GetChild(0).GetChild(0).gameObject.GetComponent<Image>();
-        _lockSprite = Resources.Load<Sprite>("Sprites/Locked");
-        _unlockSprite = Resources.Load<Sprite>("Sprites/Unlocked");
+        _worldSpaceCanvasTransform = WorldCanvas.Instance.transform; // Get the WorldSpaceCanvas
+        transform.SetParent(_worldSpaceCanvasTransform); // Set the parent of the TriggerImage to the WorldSpaceCanvas
     }
     public void Unlocked()
     {
-        _image.sprite = _unlockSprite;
+        // Set the sprite of the TriggerImage to the Unlocked sprite
+        unlockedImageComponent.sprite = unlockedSprite;
     }
 }

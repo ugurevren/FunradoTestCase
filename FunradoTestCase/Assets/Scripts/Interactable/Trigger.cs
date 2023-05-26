@@ -5,30 +5,34 @@ using UnityEngine;
 
 namespace Interactable
 {
-    public class Trigger : MonoBehaviour, Interactable
+    public class Trigger : MonoBehaviour, IInteractable
     {
-        public  bool isOpen = false;
-        private Material _materialRed;
-        private Material _materialBlue;
-        public GameObject connectedDoor;
-        private TriggerImage _triggerImage;
+        // This class is used for the trigger of doors.
+        private  bool isOpen = false; // is the door open
+        [SerializeField] private Material _materialRed; // the red material
+        [SerializeField] private Material _materialBlue; // the blue material
+        [SerializeField] private Renderer renderer; // the renderer of the trigger
+        [SerializeField] private GameObject connectedDoor; // the connected door to trigger
+        private TriggerImage _triggerImage; // the trigger image
+        [SerializeField] 
+        
 
         private void Awake()
         {
-            _triggerImage = GetComponentInChildren<TriggerImage>();
+            _triggerImage = GetComponentInChildren<TriggerImage>(); // get the trigger image
         }
-
+        
         private void Start()
         {
-            _materialRed = Resources.Load<Material>("Materials/Red");
-            _materialBlue = Resources.Load<Material>("Materials/Blue");
             if (connectedDoor.GetComponent<Door>().doorColor == Door.DoorColor.Blue)
             {
-               transform.GetChild(0).GetComponent<Renderer>().material = _materialBlue;
+                // set the color of the trigger as blue if the door is blue
+               renderer.material = _materialBlue;
             }
             else if (connectedDoor.GetComponent<Door>().doorColor == Door.DoorColor.Red)
             {
-                transform.GetChild(0).GetComponent<Renderer>().material = _materialRed;
+                // set the color of the trigger as red if the door is red
+                renderer.material = _materialRed;
             }
             
         }

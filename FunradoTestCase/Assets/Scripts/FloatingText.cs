@@ -18,7 +18,7 @@ public class FloatingText : MonoBehaviour
     {
         _mainCameraTransform= Camera.main.transform;
         _unitTransform = transform.parent;
-        _worldSpaceCanvasTransform = WorldCanvasInstance.Instance.transform;
+        _worldSpaceCanvasTransform = WorldCanvas.Instance.transform;
         transform.SetParent(_worldSpaceCanvasTransform);
         _text = GetComponentInChildren<TextMeshProUGUI>();
     }
@@ -28,16 +28,19 @@ public class FloatingText : MonoBehaviour
     {
         if (_unitTransform== null)
         {
+            // if the unit is destroyed, destroy the floating text
             Destroy(gameObject);
         }
-        Transform transform1;
-        (transform1 = transform).rotation = Quaternion.LookRotation(transform.position - _mainCameraTransform.position);
-        transform1.position = _unitTransform.position + offset;
+        Transform transform1; // the transform of the floating text
+        // make the floating text always face the camera
+        (transform1 = transform).rotation = Quaternion.LookRotation(transform.position - _mainCameraTransform.position); 
+        transform1.position = _unitTransform.position + offset; // set the position of the floating text
         
         
     }
     public void SetText(string text)
     {
+        // set the text of the floating text
         _text.text = text;
     }
 }
